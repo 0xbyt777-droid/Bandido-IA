@@ -1,0 +1,102 @@
+
+
+body{
+    background-color: #0a0a0a;
+    color: white;
+}
+
+/* Contenedor Principal */
+.main-container {
+    padding: 100px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Área de subida */
+.custom-file-upload {
+    display: block;
+    border: 2px dashed #9D4EDD;
+    border-radius: 20px;
+    padding: 40px;
+    cursor: pointer;
+    background: rgba(157, 78, 221, 0.05);
+    transition: 0.3s;
+}
+
+.custom-file-upload:hover {
+    background: rgba(157, 78, 221, 0.1);
+    border-color: #C192EE;
+}
+
+#file-upload { display: none; }
+
+.upload-icon { font-size: 40px; display: block; margin-bottom: 10px; }
+
+/* Vista previa de imagen */
+#image-preview-container { margin-top: 20px; }
+#image-preview { max-width: 150px; border-radius: 10px; }
+
+/* Botones de Tono */
+.tones-section { margin-top: 40px; }
+.tones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.tone-btn {
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #242424;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tone-btn:hover { background: #9D4EDD; transform: translateY(-3px); }
+
+/* Sección de Respuesta */
+.response-container {
+    margin-top: 50px;
+    animation: fadeIn 0.5s ease;
+}
+
+.response-box {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    color: #eee;
+    line-height: 1.6;
+}
+
+.copy-btn {
+    background: #9D4EDD;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hidden { display: none; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* El botón cuando está seleccionado */
+.tone-btn.active {
+    background-color: #9D4EDD; /* El morado de tu marca */
+    border-color: #C192EE;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+}

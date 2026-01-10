@@ -1,0 +1,282 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    height: 100vh;
+    background-color: #0a0a0a; /* Fondo casi negro para que resalte más */
+    
+    /* El círculo degradado: 
+       'circle at 100% 100%' lo ubica abajo a la derecha.
+       El color #9D4EDD se desvanece hacia transparente.
+    */
+    /* background-image: radial-gradient(
+        circle 2000px at 750px 765px, 
+        rgba(157, 78, 221, 0.4) 0%, 
+        rgba(157, 78, 221, 0.1) 30%, 
+        transparent 70%
+        
+    ); */
+    
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
+
+/* --- BASE --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto; /* Centra el contenido en pantallas grandes */
+    padding: 0 20px;
+}
+
+.content {
+    min-height: 88px;
+    display: flex;
+    align-items: center; /* Centra el menú verticalmente */
+}
+
+.menu {
+    /* Quitamos el absolute para que no flote sobre el resto del contenido */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 25px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* --- NAVBAR PC --- */
+.navbar ul {
+    display: flex; /* Reemplaza al float: left */
+    list-style: none;
+}
+
+.navbar ul li a {
+    font-size: 18px;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: #9D4EDD; /* Tu color morado */
+}
+
+/* Ocultamos el checkbox y el icono en PC */
+#menu, .menu-icon-label {
+    display: none;
+}
+
+/* --- RESPONSIVE (Móvil) --- */
+@media (max-width: 768px) {
+    /* El contenedor padre debe permitir que los hijos salten de línea */
+    .menu {
+        display: flex;
+        flex-direction: row; /* Logo e icono en la misma fila */
+        flex-wrap: wrap;     /* El nav saltará abajo */
+        align-items: center; 
+        justify-content: space-between; /* Logo izquierda, Icono derecha */
+    }
+
+    .menu-icon-label {
+        display: block;
+        cursor: pointer;
+        color: white;
+        font-size: 30px;
+        margin-left: auto;
+        
+    }
+
+    .navbar {
+        /* Mantenemos el fondo oscuro que tenías */
+        background-color: rgba(18, 18, 18, 0.95); 
+        
+        /* CAMBIO: position relative para que EMPUJE el contenido */
+        position: relative; 
+        width: 100%;
+        display: none; 
+        order: 3; /* Lo posiciona debajo del logo */
+        margin-top: 15px; /* Separación pequeña del logo */
+    }
+
+    .navbar ul {
+        display: flex;
+        flex-direction: column; /* Lista vertical */
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .navbar ul li {
+        width: 100%;
+        text-align: left; /* Mantiene el texto a la izquierda */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar ul li a {
+        display: block;
+        color: white;
+        padding: 15px 20px; /* Espaciado interno para los clics */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    /* Motor del menú */
+    #menu:checked ~ .navbar {
+        display: block;
+    }
+}
+
+/* main */
+
+
+
+/* Estilos específicos de la Sección Hero */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 85vh; /* Ocupa casi toda la altura de la pantalla */
+    gap: 40px;
+    padding: 60px 0;
+}
+
+/* Texto del Hero */
+.hero-txt {
+    flex: 1;
+    padding-left: 50px;
+}
+
+.hero-txt h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem); /* Tamaño fluido: se ajusta solo */
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.neon-text {
+    color: #9D4EDD;
+    text-shadow: 0 0 15px rgba(157, 78, 221, 0.7);
+}
+
+.hero-txt p {
+    font-size: 1.1rem;
+    color: #b0b0b0;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+/* Botones */
+.btn-main {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #9D4EDD;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(157, 78, 221, 0.6);
+}
+
+
+/* Imagen del Hero */
+/* 1. El contenedor padre debe ser relativo */
+/* 1. CONFIGURACIÓN PARA PC (Lado a lado) */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 85vh;
+    gap: 40px;
+}
+
+.hero-txt {
+    flex: 1;
+}
+
+.hero-img {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* 2. CONFIGURACIÓN PARA CELULARES (Uno debajo del otro) */
+@media (max-width: 768px) {
+    .hero {
+        /* Cambia de fila a columna */
+        flex-direction: column; 
+        
+        /* Centra el texto y las imágenes para que se vea mejor en móvil */
+        text-align: center;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    .hero-txt {
+        order: 1; /* Asegura que el texto vaya primero (arriba) */
+    }
+
+    .hero-img {
+        order: 2; /* Asegura que las imágenes vayan después (abajo) */
+        width: 100%;
+        margin-top: 30px; /* Espacio entre el texto y las fotos */
+        gap: 40px;
+    }
+
+    .img-box img {
+        /* Hacemos las imágenes un poco más pequeñas para que quepan juntas */
+        max-width: 190px; 
+    }
+    
+}
+
+
+.glow-circle {
+    position: fixed;
+    top: 20%;
+    right: -150px; /* Lo sacamos un poco para que sea solo un resplandor */
+    width: 900px;
+    height: 900px;
+    background: #9D4EDD;
+    filter: blur(150px);
+    border-radius: 50%;
+    opacity: 0.45;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* 2. Estilo para Celulares (Responsive) */
+@media (max-width: 768px) {
+    .glow-circle {
+        width: 500px;  /* Antes 300px */
+        height: 500px;
+        right: -150px;
+        filter: blur(120px);
+        opacity: 0.5;
+    }
+}
+
+
