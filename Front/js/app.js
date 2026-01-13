@@ -1,84 +1,71 @@
-/**
- * BANDIDO IA - CLIENTE FRONT-END
- * Este archivo maneja la interfaz y la comunicación con Supabase.
- * Las llaves se dejan vacías para seguridad en GitHub.
- */
+// 1. CONFIGURACIÓN
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL; 
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON; 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 1. CONFIGURACIÓN (Se llenan en el panel de Vercel/Supabase)
-const SUPABASE_URL = ""; 
-const SUPABASE_KEY = ""; 
+let selectedTone = "Bandido"; // Tono por defecto
 
-// 2. INICIALIZACIÓN
-// Validamos que existan las llaves antes de iniciar
-let supabase;
-if (SUPABASE_URL && SUPABASE_KEY) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} else {
-    console.warn("⚠️ Configuración de Supabase ausente. Verifica tus variables de entorno.");
+// 2. FUNCIÓN PARA SELECCIONAR EL TONO (La llama tu HTML)
+window.selectTone = function(tono) {
+    selectedTone = tono;
+    
+    // Opcional: Feedback visual para saber cuál botón está marcado
+    document.querySelectorAll('.tone-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.includes(tono)) btn.classList.add('active');
+    });
+    
+    console.log("Tono seleccionado:", selectedTone);
 }
 
-// 3. SELECCIÓN DE ELEMENTOS
-const imageInput = document.getElementById('imageInput');
-const analyzeBtn = document.getElementById('analyzeBtn');
-const resultDiv = document.getElementById('result');
+// 3. FUNCIÓN PARA PREVISUALIZAR Y ANALIZAR (La llama tu input file)
+window.previewImage = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-// 4. LÓGICA DE ANÁLISIS
-async function analyzeImage() {
-    // Verificamos si supabase está listo
-    if (!supabase) {
-        resultDiv.innerHTML = "<p style='color:orange;'>⚠️ Error: No se han configurado las llaves de conexión.</p>";
-        return;
+    // Mostrar vista previa en el HTML
+    const reader = new FileReader();
+    reader.onload = function() {
+        const preview = document.getElementById('image-preview');
+        preview.src = reader.result;
+        document.getElementById('image-preview-container').classList.remove('hidden');
+        
+        // LANZAR EL ANÁLISIS AUTOMÁTICAMENTE O PUEDES CREAR UN BOTÓN APARTE
+        analyzeImage(reader.result.split(',')[1]);
     }
+    reader.readAsDataURL(file);
+}
 
-    const file = imageInput.files[0];
-    if (!file) {
-        alert("Por favor, selecciona una imagen primero.");
-        return;
-    }
-
-    // Feedback visual
-    resultDiv.innerHTML = `
-        <div class="loading">
-            <p>🔍 Bandido IA analizando objeto...</p>
-            <small>Esto puede tardar unos segundos.</small>
-        </div>
-    `;
-    analyzeBtn.disabled = true;
+// 4. EL CEREBRO: LLAMADA A SUPABASE
+async function analyzeImage(base64Data) {
+    const responseText = document.getElementById('response-text');
+    const responseSection = document.getElementById('response-section');
+    
+    responseText.innerText = "Analizando con estilo " + selectedTone + "...";
+    responseSection.classList.remove('hidden');
 
     try {
-        // Convertir imagen a Base64
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        
-        reader.onload = async () => {
-            const base64Image = reader.result.split(',')[1];
+        const { data, error } = await supabase.functions.invoke('bandido-analyzer', {
+            body: { 
+                image: base64Data, 
+                tono: selectedTone // <--- AQUÍ LE PASAMOS EL TONO ELEGIDO
+            }
+        });
 
-            // LLAMADA A LA IA (Edge Function)
-            // 'bandido-analyzer' es el nombre que le daremos a tu función en Supabase
-            const { data, error } = await supabase.functions.invoke('bandido-analyzer', {
-                body: { image: base64Image }
-            });
+        if (error) throw error;
 
-            if (error) throw error;
-
-            // MOSTRAR RESULTADO
-            resultDiv.innerHTML = `
-                <div class="response-card">
-                    <h3>✅ Resultado:</h3>
-                    <p>${data.analysis}</p>
-                </div>
-            `;
-        };
+        // Mostrar la respuesta de Gemini
+        responseText.innerText = data.floro;
 
     } catch (err) {
-        console.error("Error:", err);
-        resultDiv.innerHTML = "<p style='color:red;'>❌ Error crítico al conectar con la IA.</p>";
-    } finally {
-        analyzeBtn.disabled = false;
+        console.error(err);
+        responseText.innerText = "Error al obtener el floro. Revisa la consola.";
     }
 }
 
-// 5. EVENTOS
-if (analyzeBtn) {
-    analyzeBtn.addEventListener('click', analyzeImage);
+// 5. FUNCIÓN PARA COPIAR
+window.copyResponse = function() {
+    const text = document.getElementById('response-text').innerText;
+    navigator.clipboard.writeText(text);
+    alert("¡Floro copiado!");
 }
