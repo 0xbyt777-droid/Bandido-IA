@@ -1,7 +1,7 @@
 // 1. CONFIGURACIÓN
 // Nota: Asegúrate de que estas llaves sean las correctas de tu panel de Supabase
-const SUPABASE_URL = "https://jccugrulawykqaoajbew.supabase.co"; 
-const SUPABASE_KEY = "sb_publishable_pbrqRfTKgssYDhX16EKxpA_XQ1Vc61X"; 
+const SUPABASE_URL = "https://gkpuchloqugpncomgxhi.supabase.co"; 
+const SUPABASE_KEY = "sb_publishable_XwPMObqLa81rMC6kLXwabQ_KT7oGOwZ"; 
 
 // Inicializamos el cliente
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
