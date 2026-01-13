@@ -1,10 +1,11 @@
 // 1. CONFIGURACIÓN
 // Nota: Asegúrate de que estas llaves sean las correctas de tu panel de Supabase
+// Asegúrate de que los nombres sean EXACTOS a los de Vercel
 const SUPABASE_URL = "https://gkpuchloqugpncomgxhi.supabase.co"; 
-const SUPABASE_KEY = "sb_publishable_XwPMObqLa81rMC6kLXwabQ_KT7oGOwZ"; 
+const SUPABASE_ANON_KEY = "sb_publishable_XwPMObqLa81rMC6kLXwabQ_KT7oGOwZ"; 
 
-// Inicializamos el cliente
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Inicializamos el cliente usando esos mismos nombres
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let selectedTone = "Bandido"; 
 
