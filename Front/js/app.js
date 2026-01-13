@@ -1,8 +1,9 @@
-// 1. CONFIGURACIÓN (Cambiamos el nombre para evitar el error de "already declared")
+// 1. CONFIGURACIÓN
+// Nota: Asegúrate de que estas llaves sean las correctas de tu panel de Supabase
 const SUPABASE_URL = "https://jccugrulawykqaoajbew.supabase.co"; 
 const SUPABASE_KEY = "sb_publishable_pbrqRfTKgssYDhX16EKxpA_XQ1Vc61X"; 
 
-// Usamos supabaseClient en lugar de solo supabase
+// Inicializamos el cliente
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let selectedTone = "Bandido"; 
@@ -14,24 +15,23 @@ window.selectTone = function(tono) {
     
     document.querySelectorAll('.tone-btn').forEach(btn => {
         btn.classList.remove('active');
-        if(btn.innerText.includes(tono)) btn.classList.add('active');
+        // Esto busca el texto en el botón para marcarlo como activo
+        if(btn.innerText.toLowerCase().includes(tono.toLowerCase())) btn.classList.add('active');
     });
 }
 
 // 3. FUNCIÓN PARA PREVISUALIZAR E INICIAR ANÁLISIS
 window.previewImage = function(event) {
-    console.log("Subida detectada...");
     const file = event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = function() {
-        // Mostrar la imagen en el HTML
         const preview = document.getElementById('image-preview');
         preview.src = reader.result;
         document.getElementById('image-preview-container').classList.remove('hidden');
         
-        // Enviar a la IA
+        // Enviar a la IA (quitamos el encabezado data:image/...)
         analyzeImage(reader.result.split(',')[1]);
     }
     reader.readAsDataURL(file);
@@ -42,11 +42,12 @@ async function analyzeImage(base64Data) {
     const responseText = document.getElementById('response-text');
     const responseSection = document.getElementById('response-section');
     
-    responseText.innerText = "Johnny Bravo está pensando en tono " + selectedTone + "...";
+    // Feedback visual
+    responseText.innerText = "Johnny Bravo está analizando tu facha en tono " + selectedTone + "...";
     responseSection.classList.remove('hidden');
 
     try {
-        // IMPORTANTE: Aquí también usamos supabaseClient
+        // Invocamos la función 'bandido-analyzer'
         const { data, error } = await supabaseClient.functions.invoke('bandido-analyzer', {
             body: { 
                 image: base64Data, 
@@ -55,11 +56,18 @@ async function analyzeImage(base64Data) {
         });
 
         if (error) throw error;
-        responseText.innerText = data.floro;
+
+        // --- EXPLICACIÓN DEL CAMBIO ---
+        // Usamos 'data.analysis' porque así lo definimos en el index.ts de la Edge Function
+        if (data && data.analysis) {
+            responseText.innerText = data.analysis;
+        } else {
+            responseText.innerText = "Mano, la IA respondió pero no soltó el floro. Intenta otra vez.";
+        }
 
     } catch (err) {
         console.error("Error detallado:", err);
-        responseText.innerText = "Mano, algo falló. Revisa que la función esté activa en Supabase.";
+        responseText.innerText = "¡Error fatal! Asegúrate de que GEMINI_API_KEY esté en los Secrets de Supabase.";
     }
 }
 
@@ -67,5 +75,5 @@ async function analyzeImage(base64Data) {
 window.copyResponse = function() {
     const text = document.getElementById('response-text').innerText;
     navigator.clipboard.writeText(text);
-    alert("¡Floro copiado al portapapeles!");
+    alert("¡Floro copiado!");
 }
