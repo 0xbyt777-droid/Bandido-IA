@@ -1,7 +1,15 @@
+/**
+ * BANDIDO IA - CONFIGURACIÓN DIRECTA
+ */
+
 // 1. CONFIGURACIÓN
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL; 
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON; 
+const SUPABASE_URL = "https://jccugrulawykqaoajbew.supabase.co"; 
+const SUPABASE_KEY = "sb_publishable_pbrqRfTKgssYDhX16EKxpA_XQ1Vc61X"; 
+
+// 2. INICIALIZACIÓN
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// El resto de tu lógica (selectTone, previewImage, analyzeImage) se queda igual...
 
 let selectedTone = "Bandido"; // Tono por defecto
 
